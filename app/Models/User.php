@@ -49,4 +49,7 @@ class User extends Authenticatable
             'password',
         ];
     }
+    public function trainings(){
+        return $this->hasMany(Trainings::class,"training_id");
+    }
 }
