@@ -74,24 +74,114 @@ class TrainingController extends Controller
     /**
      * Display the specified resource.
      */
+   // public function show(string $id)
+   // {
+        //
+  //  }
     public function show(string $id)
     {
-        //
+        try {
+            $training = Trainings::findOrFail($id);
+            return response()->json($training,200);
+        }catch(ModelNotFoundException){
+            return response()->json(
+                [
+                    "message"=>"Training not found",
+                ],404);
+        }catch (QueryException $e) {
+            return response()->json([
+                'message'=>'Database  error',
+                'error'=> $e->getmessage()
+            ],500);
+        }catch (Exception $e) {
+            return response()->json([
+                'message'=>'An error occured',
+                'error'=> $e->getmessage()
+            ],500);
+        }
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
+    //public function update(Request $request, string $id)
+    //{
         //
-    }
+   // }
+   public function update(Request $request, string $id)
+   {
+       try {
+
+            $request->validate([
+                'title' => 'required',
+                'description' => 'required',
+                'duration' => 'required|integer',
+                'price' => 'required|numeric',
+                'trainer_id' => 'required|uuid',
+            ]);
+            dd('error');
+           $training = Trainings::findOrFail($id);
+
+           $training->title = $request->input('title');
+            $training->description = $request->input('description');
+            $training->duration = $request->input('duration');
+            $training->price = $request->input('price');
+
+           $training->save();
+           $response = [
+               "message"=>"Training updated successfully",
+           ];
+           return response()->json($response,201);
+       }catch(ModelNotFoundException){
+           return response()->json(
+               [
+                   "message"=>"Training not found",
+               ],404);
+       }catch (QueryException $e) {
+           return response()->json([
+               'message'=>'Database  error',
+               'error'=> $e->getmessage()
+           ],500);
+       }catch (Exception $e) {
+           return response()->json([
+               'message'=>'An error occured',
+               'error'=> $e->getmessage()
+           ],500);
+       }
+   }
 
     /**
      * Remove the specified resource from storage.
      */
+    //public function destroy(string $id)
+   // {
+        //
+   // }
     public function destroy(string $id)
     {
-        //
+        try {
+            $training = Trainings::findOrFail($id);
+            $training->delete();
+            $response = [
+                "message"=>"Training deleted successfully",
+            ];
+            return response()->json($response,201);
+        }catch(ModelNotFoundException){
+            return response()->json(
+                [
+                    "message"=>"Training not found",
+                ],404);
+        }catch (QueryException $e) {
+            return response()->json([
+                'message'=>'Database  error',
+                'error'=> $e->getmessage()
+            ],500);
+        }catch (Exception $e) {
+            return response()->json([
+                'message'=>'An error occured',
+                'error'=> $e->getmessage()
+            ],500);
+        }
     }
 }
