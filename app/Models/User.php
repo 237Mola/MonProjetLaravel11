@@ -52,4 +52,8 @@ class User extends Authenticatable
     public function trainings(){
         return $this->hasMany(Trainings::class,"training_id");
     }
+
+    public function registration(){
+        return $this->hasMany(Registration::class);
+    }
 }

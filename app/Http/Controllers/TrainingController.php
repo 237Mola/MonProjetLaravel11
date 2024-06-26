@@ -113,16 +113,8 @@ class TrainingController extends Controller
    {
        try {
 
-            $request->validate([
-                'title' => 'required',
-                'description' => 'required',
-                'duration' => 'required|integer',
-                'price' => 'required|numeric',
-                'trainer_id' => 'required|uuid',
-            ]);
-            dd('error');
-           $training = Trainings::findOrFail($id);
 
+           $training = Trainings::findOrFail($id);
            $training->title = $request->input('title');
             $training->description = $request->input('description');
             $training->duration = $request->input('duration');
